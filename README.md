@@ -36,6 +36,28 @@
 
 * ### 🖥️ Interactive Streamlit web interface
 
+# **Streamlit App**
+
+### **🧭 User-Centric Interface**
+
+#### Designed with intuitive inputs and clear sections, making trip planning easy even for non-technical users.
+
+### **🎛️ Interactive Controls**
+
+#### Sliders, text fields, and buttons allow users to customize travel preferences in real time.
+
+### **🧩 Clean & Minimal Layout**
+
+#### A minimalist design ensures better readability, faster navigation, and a smooth user experience.
+
+### **⚡ Real-Time Responsiveness**
+
+#### Instant feedback with loaders and live results improves user trust and engagement.
+
+### **📊 Structured Output Display**
+
+#### Travel plans are presented in an organized format (summary, itinerary, weather, budget) for easy understanding.  
+
 # **✅ Conclusion**
 
 ## The Agentic AI-Based Travel Planning Assistant successfully demonstrates how agentic AI can be applied to real-world travel planning. By integrating structured datasets, real-time APIs, and intelligent tool orchestration, the system delivers accurate, explainable, and user-friendly travel itineraries. This project highlights the practical value of agentic AI systems and provides a scalable foundation for future enhancements such as live booking and advanced personalization.
