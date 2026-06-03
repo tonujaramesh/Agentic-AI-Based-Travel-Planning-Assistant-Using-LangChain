@@ -1,65 +1,256 @@
-# **🌍 Project Name** - Agentic AI-Based Travel Planning Assistant Using LangChain
-# **Project Type** - ***Agentic AI / AI Application Project***
-## An end-to-end AI system that uses tool-based reasoning, APIs, and a web interface to automate travel planning.
+# 🌍 Agentic AI-Based Travel Planning Assistant Using LangChain
 
-# 📘 **Project Summary -** 
+## 🚀 Live Demo
 
-## The project builds an intelligent travel assistant that analyzes user preferences and autonomously generates complete travel itineraries, including flights, hotels, attractions, weather insights, and budget estimation using agentic AI principles.
+🌐 **Streamlit Application**
 
-# **❓ Problem Statement**
+https://agentic-ai-based-travel-planning-assistant-using-langchain.streamlit.app/
 
-## Traditional travel planning is time-consuming and fragmented, requiring users to search multiple platforms for flights, hotels, weather, and attractions. There is a need for a single intelligent system that can reason and plan trips automatically.
+---
 
-# **💼 Business Use Cases**
+# 📌 Project Overview
 
-* ### ✈️ Online Travel Agencies (OTAs)
+The **Agentic AI Travel Planning Assistant** is an intelligent travel recommendation platform built using **LangChain, Streamlit, Plotly, and Python**.
 
-* ### 🏨 Airline & Hotel Booking Platforms
+The system simulates an AI travel agent that analyzes user preferences and generates a personalized travel plan by combining:
 
-* ### 🗺️ Tourism Boards
+* ✈️ Flight Recommendations
+* 🏨 Hotel Selection
+* 🌦️ Weather Forecasting
+* 🗺️ Day-wise Itinerary Planning
+* 💰 Budget Estimation
+* 📊 Travel Analytics Dashboard
+* 🤖 AI-Powered Travel Insights
 
-* ### 🧳Corporate Travel Management
+The application follows an **Agentic AI architecture**, where multiple tools collaborate to create a complete travel plan.
 
-* ### 🤖 AI-powered Self-Service Travel Applications
+---
 
-# **⚙️ Key Features**
+# ✨ Key Features
 
-* ### Intelligent flight and hotel selection
+| Feature                     | Description                                |
+| --------------------------- | ------------------------------------------ |
+| ✈️ Flight Recommendation    | Selects the best available flight option   |
+| 🏨 Hotel Recommendation     | Suggests hotels based on budget and rating |
+| 🌦️ Weather Forecast        | Displays weather conditions for the trip   |
+| 🗺️ Itinerary Generation    | Creates day-wise travel activities         |
+| 💰 Budget Optimization      | Calculates total travel expenses           |
+| 📊 Analytics Dashboard      | Interactive visualizations using Plotly    |
+| 🤖 AI Recommendation Engine | Generates intelligent travel insights      |
+| 🌐 Streamlit Deployment     | Live web application                       |
 
-* ### 🧠 Agentic AI reasoning with LangChain tools
+---
 
-* ### 🌦️ Real-time weather analysis
+# 🖼️ Application Screenshots
 
-* ### 🗺️ Automated day-wise itinerary generation
+## 1️⃣ Home Dashboard
 
-* ### 💰 Transparent budget estimation
+The user enters travel preferences such as departure city, destination, trip duration, and hotel budget.
 
-* ### 🖥️ Interactive Streamlit web interface
+![Home Dashboard](images/dashboard-home.png)
 
-# **Streamlit App**
+---
 
-### **🧭 User-Centric Interface**
+## 2️⃣ Trip Overview & Travel Intelligence Score
 
-#### Designed with intuitive inputs and clear sections, making trip planning easy even for non-technical users.
+Displays key travel metrics including:
 
-### **🎛️ Interactive Controls**
+* Trip Duration
+* Flight Cost
+* Hotel Cost
+* Total Budget
+* Cost Per Day
+* AI Travel Score
 
-#### Sliders, text fields, and buttons allow users to customize travel preferences in real time.
+![Trip Overview](images/trip-overview.png)
 
-### **🧩 Clean & Minimal Layout**
+---
 
-#### A minimalist design ensures better readability, faster navigation, and a smooth user experience.
+## 3️⃣ Flight & Hotel Recommendation Engine
 
-### **⚡ Real-Time Responsiveness**
+The AI selects a suitable flight and hotel based on the user's preferences.
 
-#### Instant feedback with loaders and live results improves user trust and engagement.
+### Flight Details
 
-### **📊 Structured Output Display**
+| Metric   | Value     |
+| -------- | --------- |
+| Airline  | Air India |
+| Duration | 2 Hours   |
+| Price    | ₹5356     |
 
-#### Travel plans are presented in an organized format (summary, itinerary, weather, budget) for easy understanding.  
+### Hotel Details
 
-# **✅ Conclusion**
+| Metric      | Value                 |
+| ----------- | --------------------- |
+| Rating      | ⭐⭐⭐⭐⭐                 |
+| Amenities   | WiFi, Breakfast, Pool |
+| Price/Night | ₹1232                 |
 
-## The Agentic AI-Based Travel Planning Assistant successfully demonstrates how agentic AI can be applied to real-world travel planning. By integrating structured datasets, real-time APIs, and intelligent tool orchestration, the system delivers accurate, explainable, and user-friendly travel itineraries. This project highlights the practical value of agentic AI systems and provides a scalable foundation for future enhancements such as live booking and advanced personalization.
+![Recommendations](images/recommendations.png)
 
-# **✨ “Agentic AI transforms intelligence into action—turning complex decisions into seamless experiences.”**
+---
+
+## 4️⃣ Interactive Travel Analytics Dashboard
+
+The dashboard provides visual insights using Plotly.
+
+### Weather Forecast Trend
+
+* Maximum Temperature
+* Minimum Temperature
+* Temperature Analysis
+
+### Budget Allocation
+
+* Flight Cost
+* Hotel Cost
+* Local Expenses
+
+![Travel Analytics](images/travel-analytics.png)
+
+---
+
+## 5️⃣ Day-wise Itinerary & AI Recommendation
+
+The application generates a structured itinerary and provides AI-generated travel suggestions.
+
+![Itinerary](images/itinerary-ai.png)
+
+---
+
+# 🏗️ System Architecture
+
+```text
+User Input
+    │
+    ▼
+LangChain Travel Agent
+    │
+ ┌──┼───────────┬──────────┬──────────┐
+ ▼  ▼           ▼          ▼          ▼
+
+Flight Tool   Hotel Tool  Weather Tool
+Place Tool    Budget Tool
+
+    │
+    ▼
+
+Final Travel Plan
+
+    │
+    ▼
+
+Streamlit Dashboard
+```
+
+---
+
+# 📂 Project Structure
+
+```text
+Agentic-AI-Based-Travel-Planning-Assistant-Using-LangChain
+│
+├── agent/
+│   ├── __init__.py
+│   └── travel_agent.py
+│
+├── tools/
+│   ├── budget_tool.py
+│   ├── flight_tool.py
+│   ├── hotel_tool.py
+│   ├── weather_tool.py
+│   ├── place_tool.py
+│   └── data_loader.py
+│
+├── output/
+│   └── final_output.py
+│
+├── Data_Sources/
+│   ├── flights.json
+│   ├── hotels.json
+│   └── places.json
+│
+├── images/
+│   ├── dashboard-home.png
+│   ├── trip-overview.png
+│   ├── travel-analytics.png
+│   ├── recommendations.png
+│   └── itinerary-ai.png
+│
+├── app.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# ⚙️ Technology Stack
+
+| Category             | Technologies              |
+| -------------------- | ------------------------- |
+| Programming Language | Python                    |
+| Agent Framework      | LangChain                 |
+| Frontend             | Streamlit                 |
+| Data Processing      | Pandas                    |
+| Visualization        | Plotly                    |
+| Storage              | JSON                      |
+| Version Control      | Git & GitHub              |
+| Deployment           | Streamlit Community Cloud |
+
+---
+
+# 📊 Dashboard Metrics
+
+The application tracks:
+
+| KPI                       | Description                     |
+| ------------------------- | ------------------------------- |
+| Trip Duration             | Total days of travel            |
+| Flight Cost               | Airfare expenses                |
+| Hotel Cost                | Accommodation expenses          |
+| Local Expenses            | Food & Travel                   |
+| Cost Per Day              | Daily trip expenditure          |
+| Travel Intelligence Score | AI-generated trip quality score |
+
+---
+
+# 🎯 Business Impact
+
+This project demonstrates how Agentic AI can be used to:
+
+* Automate travel planning
+* Reduce manual itinerary creation
+* Optimize travel budgets
+* Provide personalized recommendations
+* Deliver insights through analytics dashboards
+
+---
+
+# 🔮 Future Enhancements
+
+* Real-Time Flight API Integration
+* OpenWeather API Integration
+* Google Places API Integration
+* Hotel Booking APIs
+* Dynamic Route Optimization
+* Multi-City Travel Planning
+* AI Chat-Based Travel Assistant
+* Personalized Recommendation Engine
+
+---
+
+# 👩‍💻 Author
+
+### Tonuja Ramesh
+
+Data Science Undergraduate | AI & Analytics Enthusiast
+
+🔗 GitHub:
+https://github.com/tonujaramesh
+
+🌐 Live Application:
+https://agentic-ai-based-travel-planning-assistant-using-langchain.streamlit.app/
+
+---
+
+## ⭐ If you found this project useful, please consider giving it a star!
