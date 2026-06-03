@@ -1,66 +1,153 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+
 from agent.travel_agent import run_travel_agent
 from output.final_output import generate_final_output
 
-# -------------------------------------------------
-# Page Configuration
-# -------------------------------------------------
+# =====================================================
+# PAGE CONFIG
+# =====================================================
 st.set_page_config(
     page_title="Agentic AI Travel Planner",
     page_icon="🌍",
-    layout="centered",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# -------------------------------------------------
-# Header Section
-# -------------------------------------------------
-st.markdown("## 🌍 Agentic AI Travel Planning Assistant")
-st.markdown(
-    "Plan personalized trips using **AI-driven reasoning**, "
-    "real-time data, and intelligent decision making."
+st.markdown("""
+<style>
+
+.stApp{
+    background-color:#F8FAFC;
+}
+
+.block-container{
+    padding-top:1rem;
+    max-width:1400px;
+}
+
+div[data-testid="metric-container"]{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    border:1px solid #E2E8F0;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+div[data-testid="metric-container"] label{
+    color:#64748B !important;
+}
+
+div[data-testid="metric-container"] [data-testid="stMetricValue"]{
+    color:#0F172A !important;
+    font-size:2rem !important;
+    font-weight:700 !important;
+}
+
+.travel-card{
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    border:1px solid #E2E8F0;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom:15px;
+    color:#0F172A;
+}
+
+.itinerary-card{
+    background:white;
+    padding:15px;
+    border-left:5px solid #2563EB;
+    border-radius:12px;
+    border:1px solid #E2E8F0;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom:10px;
+    color:#0F172A;
+}
+
+.stButton button{
+    background:#2563EB;
+    color:white;
+    border:none;
+    border-radius:10px;
+    height:3rem;
+    font-weight:bold;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# =====================================================
+# HERO SECTION
+# =====================================================
+st.markdown("""
+<div style="
+background:linear-gradient(135deg,#2563EB,#1D4ED8);
+padding:30px;
+border-radius:20px;
+margin-bottom:20px;
+color:white;
+">
+
+<h1>🌍 Agentic AI Travel Planner</h1>
+
+<h4>AI-Powered Travel Intelligence Platform</h4>
+
+<p>Flights • Hotels • Weather • Budget • Itinerary</p>
+
+</div>
+""", unsafe_allow_html=True)
+
+# =====================================================
+# INPUTS
+# =====================================================
+st.subheader("🧳 Travel Preferences")
+
+c1, c2, c3, c4 = st.columns(4)
+
+with c1:
+    source = st.text_input(
+        "Departure City",
+        "Bangalore"
+    )
+
+with c2:
+    destination = st.text_input(
+        "Destination",
+        "Goa"
+    )
+
+with c3:
+    days = st.selectbox(
+        "Trip Duration",
+        [3,4,5,6,7]
+    )
+
+with c4:
+    budget = st.number_input(
+        "Max Hotel Budget",
+        min_value=1000,
+        max_value=10000,
+        value=5000
+    )
+
+generate_plan = st.button(
+    "🚀 Generate Travel Plan",
+    use_container_width=True
 )
 
-st.divider()
+# =====================================================
+# DEFAULT COORDINATES
+# =====================================================
+latitude = 15.2993
+longitude = 74.1240
 
-# -------------------------------------------------
-# Sidebar — User Inputs
-# -------------------------------------------------
-st.sidebar.title("🧭 Trip Preferences")
-
-source = st.sidebar.text_input("Departure City", "Bangalore")
-destination = st.sidebar.text_input("Destination City", "Goa")
-
-days = st.sidebar.slider(
-    "Trip Duration (Days)",
-    min_value=3,
-    max_value=7,
-    value=4
-)
-
-budget = st.sidebar.slider(
-    "Maximum Hotel Price per Night (₹)",
-    min_value=1000,
-    max_value=6000,
-    value=3000,
-    step=500
-)
-
-st.sidebar.subheader("📍 Destination Coordinates")
-latitude = st.sidebar.number_input(
-    "Latitude", value=15.2993, format="%.4f"
-)
-longitude = st.sidebar.number_input(
-    "Longitude", value=74.1240, format="%.4f"
-)
-
-generate_plan = st.sidebar.button("🚀 Generate Travel Plan")
-
-# -------------------------------------------------
-# Main Content — AI Execution
-# -------------------------------------------------
+# =====================================================
+# GENERATE PLAN
+# =====================================================
 if generate_plan:
-    with st.spinner("AI is planning your trip..."):
+
+    with st.spinner("🤖 Planning your trip..."):
         agent_result = run_travel_agent({
             "source": source,
             "destination": destination,
@@ -70,85 +157,207 @@ if generate_plan:
             "longitude": longitude
         })
 
-        final_output = generate_final_output(agent_result, days)
-
-    st.success("Your personalized travel plan is ready!")
-
-    # -------------------------------------------------
-    # Trip Summary
-    # -------------------------------------------------
-    st.subheader("📌 Trip Summary")
-    summary = final_output["Trip Summary"]
-
-    st.markdown(
-        f"""
-        **From:** {summary['From']}  
-        **To:** {summary['To']}  
-        **Duration:** {summary['Duration']}  
-        **Hotel Category:** {summary['Hotel Category']}
-        """
-    )
-
-    # -------------------------------------------------
-    # Flight Details
-    # -------------------------------------------------
-    st.subheader("✈️ Flight Selected")
-    flight = final_output["Flight Option Selected"]
-
-    st.markdown(
-        f"""
-        **Airline:** {flight['Airline']}  
-        **Price:** ₹{flight['Price']}  
-        **Departure:** {flight['Departure']}  
-        **Arrival:** {flight['Arrival']}  
-        **Duration:** {flight['Duration']} hours
-        """
-    )
-
-    # -------------------------------------------------
-    # Hotel Recommendation
-    # -------------------------------------------------
-    st.subheader("🏨 Hotel Recommendation")
-    hotel = final_output["Hotel Recommendation"]
-
-    st.markdown(
-        f"""
-        **Hotel Name:** {hotel['Hotel Name']}  
-        **Star Rating:** {hotel['Stars']} ⭐  
-        **Price per Night:** ₹{hotel['Price Per Night']}  
-        **Amenities:** {", ".join(hotel['Amenities'])}
-        """
-    )
-
-    # -------------------------------------------------
-    # Itinerary Section
-    # -------------------------------------------------
-    st.subheader("🗺️ Day-wise Itinerary")
-    for day, details in final_output["Day-wise Itinerary"].items():
-        st.markdown(f"**{day}:** {details['Activity']}")
-
-    # -------------------------------------------------
-    # Weather Forecast
-    # -------------------------------------------------
-    st.subheader("🌦️ Weather Forecast")
-    for day, info in final_output["Weather Forecast"].items():
-        st.markdown(
-            f"**{day}:** "
-            f"Max {info['Max Temp']}°C | "
-            f"Min {info['Min Temp']}°C | "
-            f"Wind {info['Wind Speed']} km/h"
+        final_output = generate_final_output(
+            agent_result,
+            days
         )
 
-    # -------------------------------------------------
-    # Budget Breakdown
-    # -------------------------------------------------
-    st.subheader("💰 Budget Breakdown")
+    st.success("✅ Your personalized travel plan is ready!")
+
+    flight = final_output["Flight Option Selected"]
+    hotel = final_output["Hotel Recommendation"]
     budget_info = final_output["Budget Breakdown"]
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("✈️ Flight", f"₹{budget_info['Flight Cost']}")
-    col2.metric("🏨 Hotel", f"₹{budget_info['Hotel Cost']}")
-    col3.metric("🍽️ Local", f"₹{budget_info['Local Expenses']}")
+    weather_data = []
+    for day_name, info in final_output["Weather Forecast"].items():
+        weather_data.append({
+            "Day": day_name,
+            "Max Temp": info["Max Temp"],
+            "Min Temp": info["Min Temp"]
+        })
+
+    weather_df = pd.DataFrame(weather_data)
+
+    budget_df = pd.DataFrame({
+        "Category": ["Flight", "Hotel", "Local"],
+        "Cost": [
+            budget_info["Flight Cost"],
+            budget_info["Hotel Cost"],
+            budget_info["Local Expenses"]
+        ]
+    })
+
+    # =====================================================
+    # KPI CARDS
+    # =====================================================
+    st.subheader("📊 Trip Overview")
+
+    k1, k2, k3, k4 = st.columns(4)
+
+    k1.metric(
+        "📅 Duration",
+        f"{days} Days"
+    )
+
+    k2.metric(
+        "✈ Flight",
+        f"₹{budget_info['Flight Cost']}"
+    )
+
+    k3.metric(
+        "🏨 Hotel",
+        f"₹{budget_info['Hotel Cost']}"
+    )
+
+    k4.metric(
+        "💰 Total",
+        f"₹{budget_info['Total Estimated Budget']}"
+    )
 
     st.divider()
-    st.metric("💵 Total Estimated Cost", f"₹{budget_info['Total Estimated Budget']}")
+
+    st.subheader("📍 Destination Insights")
+
+    i1, i2, i3, i4 = st.columns(4)
+
+    i1.metric("🌴 Destination", destination)
+    i2.metric("📅 Duration", f"{days} Days")
+    i3.metric("🏨 Hotel Rating", f"{hotel['Stars']} ⭐")
+    i4.metric("💰 Budget", f"₹{budget_info['Total Estimated Budget']}")
+
+    st.divider()
+
+    # =====================================================
+    # FLIGHT + HOTEL
+    # =====================================================
+    left, right = st.columns(2)
+
+    with left:
+        st.markdown(f"""
+<div class="travel-card">
+
+<h3>✈ Flight Details</h3>
+
+<b>Airline:</b> {flight['Airline']}<br>
+<b>Price:</b> ₹{flight['Price']}<br>
+<b>Departure:</b> {flight['Departure']}<br>
+<b>Arrival:</b> {flight['Arrival']}<br>
+<b>Duration:</b> {flight['Duration']} Hours
+
+</div>
+""", unsafe_allow_html=True)
+
+    with right:
+        st.markdown(f"""
+<div class="travel-card">
+
+<h3>🏨 Hotel Recommendation</h3>
+
+<b>Hotel:</b> {hotel['Hotel Name']}<br>
+<b>Stars:</b> ⭐ {hotel['Stars']}<br>
+<b>Price/Night:</b> ₹{hotel['Price Per Night']}<br>
+<b>Amenities:</b> {", ".join(hotel['Amenities'])}
+
+</div>
+""", unsafe_allow_html=True)
+
+    st.divider()
+    st.subheader("📊 Travel Analytics")
+
+    left_chart, right_chart = st.columns(2)
+
+    with left_chart:
+        fig_weather = px.line(
+            weather_df,
+            x="Day",
+            y=["Max Temp", "Min Temp"],
+            markers=True,
+            title="Temperature Forecast"
+        )
+        st.plotly_chart(
+            fig_weather,
+            use_container_width=True
+        )
+
+    with right_chart:
+        fig_budget = px.pie(
+            budget_df,
+            values="Cost",
+            names="Category",
+            hole=0.5,
+            title="Budget Allocation"
+        )
+        st.plotly_chart(
+            fig_budget,
+            use_container_width=True
+        )
+
+    st.divider()
+
+    # =====================================================
+    # WEATHER
+    # =====================================================
+    st.subheader("🌦 Weather Forecast")
+
+    # Displaying weather cards dynamically
+    weather_cols = st.columns(len(final_output["Weather Forecast"]))
+    for idx, (day_name, info) in enumerate(final_output["Weather Forecast"].items()):
+        with weather_cols[idx % len(weather_cols)]:
+            st.markdown(f"""
+    <div class="travel-card">
+
+    <b>{day_name}</b><br><br>
+
+    🌡 Max Temp : {info['Max Temp']}°C<br>
+    🌡 Min Temp : {info['Min Temp']}°C<br>
+    💨 Wind Speed : {info['Wind Speed']} km/h
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.divider()
+
+    # =====================================================
+    # ITINERARY
+    # =====================================================
+    st.subheader("🗺 Travel Itinerary")
+
+    for day_name, details in final_output["Day-wise Itinerary"].items():
+        st.markdown(f"""
+<div class="itinerary-card">
+
+<h4>{day_name}</h4>
+
+{details['Activity']}
+
+</div>
+""", unsafe_allow_html=True)
+
+    st.divider()
+
+    # =====================================================
+    # BUDGET
+    # =====================================================
+    st.subheader("💰 Budget Breakdown")
+
+    b1, b2, b3 = st.columns(3)
+
+    b1.metric(
+        "✈ Flight",
+        f"₹{budget_info['Flight Cost']}"
+    )
+
+    b2.metric(
+        "🏨 Hotel",
+        f"₹{budget_info['Hotel Cost']}"
+    )
+
+    b3.metric(
+        "🍽 Local",
+        f"₹{budget_info['Local Expenses']}"
+    )
+
+    st.metric(
+        "💵 Total Estimated Cost",
+        f"₹{budget_info['Total Estimated Budget']}"
+    )
