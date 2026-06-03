@@ -103,32 +103,33 @@ color:white;
 # =====================================================
 st.subheader("🧳 Travel Preferences")
 
-c1, c2, c3, c4 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4)
 
-with c1:
+with col1:
     source = st.text_input(
         "Departure City",
         "Bangalore"
     )
 
-with c2:
+with col2:
     destination = st.text_input(
         "Destination",
         "Goa"
     )
 
-with c3:
+with col3:
     days = st.selectbox(
         "Trip Duration",
-        [3,4,5,6,7]
+        [3, 4, 5, 6, 7]
     )
 
-with c4:
+with col4:
     budget = st.number_input(
         "Max Hotel Budget",
         min_value=1000,
-        max_value=10000,
-        value=5000
+        max_value=20000,
+        value=5000,
+        step=500
     )
 
 generate_plan = st.button(
@@ -192,27 +193,17 @@ if generate_plan:
     # =====================================================
     st.subheader("📊 Trip Overview")
 
-    k1, k2, k3, k4 = st.columns(4)
-
-    k1.metric(
-        "📅 Duration",
-        f"{days} Days"
+    cost_per_day = round(
+        budget_info["Total Estimated Budget"] / days
     )
 
-    k2.metric(
-        "✈ Flight",
-        f"₹{budget_info['Flight Cost']}"
-    )
+    k1, k2, k3, k4, k5 = st.columns(5)
 
-    k3.metric(
-        "🏨 Hotel",
-        f"₹{budget_info['Hotel Cost']}"
-    )
-
-    k4.metric(
-        "💰 Total",
-        f"₹{budget_info['Total Estimated Budget']}"
-    )
+    k1.metric("📅 Duration", f"{days} Days")
+    k2.metric("✈ Flight", f"₹{budget_info['Flight Cost']}")
+    k3.metric("🏨 Hotel", f"₹{budget_info['Hotel Cost']}")
+    k4.metric("💰 Total", f"₹{budget_info['Total Estimated Budget']}")
+    k5.metric("📊 Cost/Day", f"₹{cost_per_day}")
 
     st.divider()
 
@@ -227,6 +218,19 @@ if generate_plan:
 
     st.divider()
 
+    st.subheader("🧠 Travel Intelligence Score")
+
+    score = 70
+    if hotel["Stars"] >= 4:
+        score += 10
+    if budget_info["Total Estimated Budget"] < 20000:
+        score += 10
+    if days >= 4:
+        score += 10
+
+    st.progress(score / 100)
+    st.success(f"Overall Trip Score: {score}/100")
+
     # =====================================================
     # FLIGHT + HOTEL
     # =====================================================
@@ -235,29 +239,23 @@ if generate_plan:
     with left:
         st.markdown(f"""
 <div class="travel-card">
-
 <h3>✈ Flight Details</h3>
-
 <b>Airline:</b> {flight['Airline']}<br>
 <b>Price:</b> ₹{flight['Price']}<br>
 <b>Departure:</b> {flight['Departure']}<br>
 <b>Arrival:</b> {flight['Arrival']}<br>
 <b>Duration:</b> {flight['Duration']} Hours
-
 </div>
 """, unsafe_allow_html=True)
 
     with right:
         st.markdown(f"""
 <div class="travel-card">
-
 <h3>🏨 Hotel Recommendation</h3>
-
 <b>Hotel:</b> {hotel['Hotel Name']}<br>
 <b>Stars:</b> ⭐ {hotel['Stars']}<br>
 <b>Price/Night:</b> ₹{hotel['Price Per Night']}<br>
 <b>Amenities:</b> {", ".join(hotel['Amenities'])}
-
 </div>
 """, unsafe_allow_html=True)
 
@@ -274,10 +272,7 @@ if generate_plan:
             markers=True,
             title="Temperature Forecast"
         )
-        st.plotly_chart(
-            fig_weather,
-            use_container_width=True
-        )
+        st.plotly_chart(fig_weather, use_container_width=True)
 
     with right_chart:
         fig_budget = px.pie(
@@ -287,10 +282,7 @@ if generate_plan:
             hole=0.5,
             title="Budget Allocation"
         )
-        st.plotly_chart(
-            fig_budget,
-            use_container_width=True
-        )
+        st.plotly_chart(fig_budget, use_container_width=True)
 
     st.divider()
 
@@ -299,23 +291,15 @@ if generate_plan:
     # =====================================================
     st.subheader("🌦 Weather Forecast")
 
-    # Displaying weather cards dynamically
-    weather_cols = st.columns(len(final_output["Weather Forecast"]))
-    for idx, (day_name, info) in enumerate(final_output["Weather Forecast"].items()):
-        with weather_cols[idx % len(weather_cols)]:
-            st.markdown(f"""
-    <div class="travel-card">
-
-    <b>{day_name}</b><br><br>
-
-    🌡 Max Temp : {info['Max Temp']}°C<br>
-    🌡 Min Temp : {info['Min Temp']}°C<br>
-    💨 Wind Speed : {info['Wind Speed']} km/h
-
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.divider()
+    for day_name, info in final_output["Weather Forecast"].items():
+        st.info(
+            f"""
+📅 {day_name}
+🌡 Max Temp : {info['Max Temp']}°C
+🌡 Min Temp : {info['Min Temp']}°C
+💨 Wind Speed : {info['Wind Speed']} km/h
+"""
+        )
 
     # =====================================================
     # ITINERARY
@@ -325,11 +309,8 @@ if generate_plan:
     for day_name, details in final_output["Day-wise Itinerary"].items():
         st.markdown(f"""
 <div class="itinerary-card">
-
 <h4>{day_name}</h4>
-
 {details['Activity']}
-
 </div>
 """, unsafe_allow_html=True)
 
@@ -342,22 +323,38 @@ if generate_plan:
 
     b1, b2, b3 = st.columns(3)
 
-    b1.metric(
-        "✈ Flight",
-        f"₹{budget_info['Flight Cost']}"
-    )
-
-    b2.metric(
-        "🏨 Hotel",
-        f"₹{budget_info['Hotel Cost']}"
-    )
-
-    b3.metric(
-        "🍽 Local",
-        f"₹{budget_info['Local Expenses']}"
-    )
+    b1.metric("✈ Flight", f"₹{budget_info['Flight Cost']}")
+    b2.metric("🏨 Hotel", f"₹{budget_info['Hotel Cost']}")
+    b3.metric("🍽 Local", f"₹{budget_info['Local Expenses']}")
 
     st.metric(
         "💵 Total Estimated Cost",
         f"₹{budget_info['Total Estimated Budget']}"
     )
+
+    # =====================================================
+    # AI RECOMMENDATION
+    # =====================================================
+    st.divider()
+
+    st.subheader("🤖 AI Recommendation")
+
+    st.success(
+        f"""
+This {days}-day trip to {destination} 
+offers a balanced combination of 
+budget, accommodation quality, 
+weather conditions and local attractions.
+
+Recommended for leisure travelers 
+seeking a value-for-money experience.
+"""
+    )
+
+# =====================================================
+# FOOTER
+# =====================================================
+st.markdown("---")
+st.caption(
+    "Built using Streamlit, LangChain, Plotly and Agentic AI workflows."
+)
