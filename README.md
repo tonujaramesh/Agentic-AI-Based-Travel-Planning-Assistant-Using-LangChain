@@ -245,11 +245,10 @@ This project demonstrates how Agentic AI can be used to:
 
 Data Science Undergraduate | AI & Analytics Enthusiast
 
-🔗 GitHub:
-https://github.com/tonujaramesh
+# 🔗 Connect With Me
 
-🌐 Live Application:
-https://agentic-ai-based-travel-planning-assistant-using-langchain.streamlit.app/
+* GitHub: https://github.com/tonujaramesh
+* LinkedIn: https://www.linkedin.com/in/tonuja-ramesh-s-38871b299
 
 ---
 
